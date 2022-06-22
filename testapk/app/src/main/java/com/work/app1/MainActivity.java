@@ -8,65 +8,76 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private Button btn_start;
     private Button btn_close;
     private Button btn_pkg;
     private Button btn_swipe;
+    private Button btn_prop;
+    private EditText editTextProp;
+    private EditText editTextValue;
     private String packname = "com.work.test2";
+    private final String TAG = "mybroadcast";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initUI();
+    }
+    private void initUI( ) {
+        editTextProp = findViewById(R.id.editTextProp);
+        editTextValue = findViewById(R.id.editTextValue);
         btn_start = findViewById(R.id.btnStart);
         btn_close =  findViewById(R.id.btnCLose);
         btn_pkg =findViewById(R.id.btnPKG);
         btn_swipe = findViewById(R.id.btnPKG2);
+        btn_prop = findViewById(R.id.btnProp);
         btn_pkg.setOnClickListener(this);
         btn_start.setOnClickListener(this);
         btn_close.setOnClickListener(this);
         btn_swipe.setOnClickListener(this);
+        btn_prop.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnStart:
-               // Intent intent=new Intent("360_camera_start");
                 Intent intent = new Intent("android.intent.action.SHOW_SYSTEM_BAR");
-                Log.i("mylog", "start 360");
+                Log.i(TAG, "android.intent.action.SHOW_SYSTEM_BAR");
                 sendBroadcast(intent);
                 break;
             case R.id.btnCLose:
                 Intent intent2=new Intent("android.intent.action.HIDE_SYSTEM_BAR");
-                Log.i("mylog", "start 360");
+                Log.i(TAG, "android.intent.action.HIDE_SYSTEM_BAR");
                 sendBroadcast(intent2);
                 break;
             case R.id.btnPKG:
-                Log.i("mylog", "start 3603");
+                Log.i(TAG, "send SWIPED_SYSTEM_BAR bar:2");
                 Intent intent3=new Intent("android.intent.action.SWIPED_SYSTEM_BAR");
                 intent3.putExtra("bar", 2);
                 sendBroadcast(intent3);
-                Log.i("mylog", "start 360");
-              //sendBroadcast(intent2);
-//                PackageManager packageManager = getPackageManager();
-//                if (checkPackInfo(packname)) {
-//                    Intent intent3 = packageManager.getLaunchIntentForPackage(packname);
-//                    startActivity(intent3);
-//                } else {
-//                    Toast.makeText(MainActivity.this, "没有安装" + packname, 1).show();
-//                }
                 break;
             case R.id.btnPKG2:
-                Log.i("mylog", "start 3603");
+                Log.i(TAG, "send SWIPED_SYSTEM_BAR bar:3");
                 Intent intent4=new Intent("android.intent.action.SWIPED_SYSTEM_BAR");
                 intent4.putExtra("bar", 3);
                 sendBroadcast(intent4);
-                Log.i("mylog", "start 360");
+                break;
+            case R.id.btnProp:
+                Log.i(TAG, "set prop:" + editTextProp.getText() + "  " + editTextValue.getText());
+                Intent intent5=new Intent("android.intent.action.PROPERTY");
+                intent5.putExtra("prop", editTextProp.getText());
+                intent5.putExtra("value", editTextValue.getText());
+                sendBroadcast(intent5);
+                break;
+            default:
+                break;
         }
     }
     /**
